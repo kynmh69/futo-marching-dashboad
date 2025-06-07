@@ -1,23 +1,11 @@
-FROM golang:1.24 AS builder
+FROM scratch
 
-WORKDIR /app
+WORKDIR /
 
-COPY go.mod go.sum ./
-RUN go mod download
-
-COPY . .
-
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app ./cmd/server
-
-FROM alpine:latest
-
-RUN apk --no-cache add ca-certificates
-
-WORKDIR /root/
-
-COPY --from=builder /app/app .
-COPY --from=builder /app/.env.example .env
+# Copy the pre-built binary and config
+COPY app .
+COPY .env.example .env
 
 EXPOSE 8080
 
-CMD ["./app"]
+ENTRYPOINT ["./app"]

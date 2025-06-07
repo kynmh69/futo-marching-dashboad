@@ -1,7 +1,16 @@
+"use client";
+
 import { createContext, useContext, useEffect, useState } from "react";
 
+interface User {
+  id: string;
+  username: string;
+  fullName: string;
+  role: string;
+}
+
 interface AuthContextType {
-  user: any;
+  user: User | null;
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
   loading: boolean;
@@ -10,7 +19,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Check if user is already logged in on component mount
