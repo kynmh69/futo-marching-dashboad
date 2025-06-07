@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/kynmh69/futo-marching-dashboad/backend/internal/models"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // UserRepository defines the methods for user data access
