@@ -36,7 +36,7 @@ func main() {
 	e.Use(echomiddleware.Logger())
 	e.Use(echomiddleware.Recover())
 	e.Use(echomiddleware.CORSWithConfig(echomiddleware.CORSConfig{
-		AllowOrigins: []string{"https://trusted-domain.com", "https://another-trusted-domain.com"},
+		AllowOrigins: []string{"http://localhost:3000", "https://trusted-domain.com", "https://another-trusted-domain.com"},
 		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
 		AllowHeaders: []string{echo.HeaderAuthorization, echo.HeaderContentType},
 	}))
@@ -48,6 +48,7 @@ func main() {
 
 	// Auth routes
 	e.POST("/api/auth/register", userHandler.Register)
+	e.POST("/api/auth/register-simple", userHandler.RegisterSimple)
 	e.POST("/api/auth/login", userHandler.Login)
 
 	// API routes

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/lib/auth";
 
 export default function LoginPage() {
@@ -85,6 +86,15 @@ export default function LoginPage() {
             >
               {isLoading ? "Signing in..." : "Sign in"}
             </button>
+          </div>
+
+          <div className="text-center">
+            <Link 
+              href="/register" 
+              className="text-indigo-600 hover:text-indigo-500 text-sm"
+            >
+              Don&apos;t have an account? Register here
+            </Link>
           </div>
         </form>
       </div>
