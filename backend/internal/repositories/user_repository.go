@@ -22,11 +22,11 @@ type UserRepository interface {
 type UserMongoRepository struct {
 	db         string
 	collection string
-	client     interface{} // This will be *mongo.Client
+	client     *mongo.Client // MongoDB client
 }
 
 // NewUserMongoRepository creates a new UserMongoRepository
-func NewUserMongoRepository(client interface{}, db string) UserRepository {
+func NewUserMongoRepository(client *mongo.Client, db string) UserRepository {
 	return &UserMongoRepository{
 		db:         db,
 		collection: "users",
