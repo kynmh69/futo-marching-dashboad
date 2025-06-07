@@ -1,80 +1,80 @@
-# FUTO Marching Dashboard
+# FUTO マーチングダッシュボード
 
-A dashboard application for managing schedules and tasks for the FUTO Marching Band.
+FUTO マーチングバンドのスケジュールとタスクを管理するためのダッシュボードアプリケーションです。
 
-## Features
+## 機能
 
-- User authentication (login/logout)
-- User management (creation, editing, deletion)
-- Role management (admin and general users)
-- Calendar functionality
-- Task management
-- Practice menu management
-- Time tracking
+- ユーザー認証（ログイン/ログアウト）
+- ユーザー管理（作成、編集、削除）
+- 役割管理（管理者と一般ユーザー）
+- カレンダー機能
+- タスク管理
+- 練習メニュー管理
+- 時間追跡
 
-## Technology Stack
+## 技術スタック
 
-### Backend
+### バックエンド
 - Go 1.24.2
 - Echo Web Framework
 - MongoDB
 
-### Frontend
+### フロントエンド
 - Next.js
 - Tailwind CSS
 - TypeScript
 
-## Getting Started
+## はじめに
 
-### Prerequisites
+### 前提条件
 - Docker and Docker Compose
 - Node.js 18+
 - Go 1.24+
 - MongoDB
 
-### Running with Docker Compose
+### Docker Composeで実行
 
 ```bash
-# Clone the repository
+# リポジトリをクローン
 git clone https://github.com/kynmh69/futo-marching-dashboad.git
 cd futo-marching-dashboad
 
-# Start the application
+# アプリケーションを開始
 docker-compose up -d
 ```
 
-The application will be available at:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8080
+アプリケーションは以下のURLでアクセスできます：
+- フロントエンド: http://localhost:3000
+- バックエンドAPI: http://localhost:8080
 
-### Development Setup
+### 開発環境セットアップ
 
-#### Backend
+#### バックエンド
 ```bash
 cd backend
-cp .env.example .env  # Configure your environment variables
+cp .env.example .env  # 環境変数を設定
 go mod download
 go run cmd/server/main.go
 ```
 
-#### Frontend
+#### フロントエンド
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-## Testing
+## テスト
 
-The repository includes unit tests for both backend and frontend components.
+このリポジトリには、バックエンドとフロントエンドの両方のコンポーネントのユニットテストが含まれています。
 
-### Backend Tests
+### バックエンドテスト
 ```bash
 cd backend
 go test -v ./...
 ```
 
-### Frontend Tests
+### フロントエンドテスト
 ```bash
 cd frontend
 npm test
@@ -82,4 +82,4 @@ npm test
 
 ## GitHub Actions
 
-This project uses GitHub Actions for CI/CD. Tests are automatically run on pull requests and pushes to the main branch.
+このプロジェクトはCI/CDにGitHub Actionsを使用しています。プルリクエストとメインブランチへのプッシュで自動的にテストが実行されます。
