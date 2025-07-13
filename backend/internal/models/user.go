@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+	"regexp"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -53,6 +55,12 @@ type LoginInput struct {
 	Password string `json:"password" validate:"required"`
 }
 
+// RegisterInput represents data needed for simplified user registration
+type RegisterInput struct {
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password" validate:"required,min=6"`
+}
+
 // HashPassword creates a bcrypt hash of the password
 func (u *User) HashPassword() error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
@@ -79,4 +87,28 @@ func (u *User) PrepareCreate() {
 // PrepareUpdate sets fields needed for updating a user
 func (u *User) PrepareUpdate() {
 	u.UpdatedAt = time.Now()
+}
+
+// ValidatePassword checks if password meets complexity requirements
+// Password must contain at least one uppercase letter, one lowercase letter, and one digit
+func ValidatePassword(password string) error {
+	if len(password) < 6 {
+		return errors.New("password must be at least 6 characters long")
+	}
+
+	hasUpper := regexp.MustCompile(`[A-Z]`).MatchString(password)
+	hasLower := regexp.MustCompile(`[a-z]`).MatchString(password)
+	hasDigit := regexp.MustCompile(`[0-9]`).MatchString(password)
+
+	if !hasUpper {
+		return errors.New("password must contain at least one uppercase letter")
+	}
+	if !hasLower {
+		return errors.New("password must contain at least one lowercase letter")
+	}
+	if !hasDigit {
+		return errors.New("password must contain at least one digit")
+	}
+
+	return nil
 }

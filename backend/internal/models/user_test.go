@@ -112,3 +112,35 @@ func TestUserPrepareUpdate(t *testing.T) {
 		t.Error("UpdatedAt not close to current time")
 	}
 }
+
+func TestValidatePassword(t *testing.T) {
+	// Test valid password
+	err := ValidatePassword("Password123")
+	if err != nil {
+		t.Errorf("Valid password failed validation: %v", err)
+	}
+
+	// Test password too short
+	err = ValidatePassword("Pas1")
+	if err == nil || err.Error() != "password must be at least 6 characters long" {
+		t.Errorf("Expected password too short error, got: %v", err)
+	}
+
+	// Test password without uppercase
+	err = ValidatePassword("password123")
+	if err == nil || err.Error() != "password must contain at least one uppercase letter" {
+		t.Errorf("Expected no uppercase error, got: %v", err)
+	}
+
+	// Test password without lowercase
+	err = ValidatePassword("PASSWORD123")
+	if err == nil || err.Error() != "password must contain at least one lowercase letter" {
+		t.Errorf("Expected no lowercase error, got: %v", err)
+	}
+
+	// Test password without digit
+	err = ValidatePassword("Password")
+	if err == nil || err.Error() != "password must contain at least one digit" {
+		t.Errorf("Expected no digit error, got: %v", err)
+	}
+}

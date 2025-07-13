@@ -69,6 +69,49 @@ func (h *UserHandler) Register(c echo.Context) error {
 	return c.JSON(http.StatusCreated, user)
 }
 
+// RegisterSimple registers a new user with just username and password
+func (h *UserHandler) RegisterSimple(c echo.Context) error {
+	var input models.RegisterInput
+	if err := c.Bind(&input); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request body"})
+	}
+
+	// Validate password complexity
+	if err := models.ValidatePassword(input.Password); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	// Check if username already exists
+	existingUser, err := h.userRepo.FindByUsername(c.Request().Context(), input.Username)
+	if err == nil && existingUser != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Username already exists"})
+	}
+
+	// Create new user with default values
+	user := &models.User{
+		Username: input.Username,
+		FullName: input.Username, // Use username as default full name
+		Email:    "",             // Empty email for simple registration
+		Password: input.Password,
+		Role:     models.GeneralRole, // Default to general role
+	}
+
+	user.PrepareCreate()
+	if err := user.HashPassword(); err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to hash password"})
+	}
+
+	id, err := h.userRepo.Create(c.Request().Context(), user)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create user"})
+	}
+
+	user.ID, _ = primitive.ObjectIDFromHex(id)
+	user.Password = "" // Remove password from response
+
+	return c.JSON(http.StatusCreated, user)
+}
+
 // Login logs in a user
 func (h *UserHandler) Login(c echo.Context) error {
 	var input models.LoginInput
